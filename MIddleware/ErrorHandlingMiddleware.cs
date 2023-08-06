@@ -23,6 +23,11 @@ namespace RestaurantAPI.MIddleware
             {
                 await next.Invoke(context);
             }
+            catch (AlreadyExists alreadyExist)
+            {
+                context.Response.StatusCode = 409;
+                await context.Response.WriteAsync(alreadyExist.Message);
+            }
             catch (NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
