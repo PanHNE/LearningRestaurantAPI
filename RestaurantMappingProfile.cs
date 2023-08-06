@@ -2,6 +2,7 @@
 using RestaurantAPI.Entities;
 using RestaurantAPI.Models.Dish;
 using RestaurantAPI.Models.Restaurant;
+using RestaurantAPI.Models.User;
 
 namespace RestaurantAPI
 {
@@ -25,6 +26,8 @@ namespace RestaurantAPI
             CreateMap<Dish, DishDto>();
 
             CreateMap<CreateDishDto, Dish>();
+
+            CreateMap<RegisterUserDto, User>();
         }
     }
 }
