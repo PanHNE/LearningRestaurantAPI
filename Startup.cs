@@ -40,9 +40,6 @@ namespace RestaurantAPI
                 option.DefaultAuthenticateScheme = "Bearer";
                 option.DefaultScheme = "Bearer";
                 option.DefaultChallengeScheme = "Bearer";
-            }).AddJwtBearer( cfg =>
-            {
-
             });
 
             services.AddControllers().AddFluentValidation();
@@ -79,6 +76,8 @@ namespace RestaurantAPI
 
             app.UseMiddleware<ErrorHandlingMiddleware>();
             app.UseMiddleware<TimeOutMiddleware>();
+
+            app.UseAuthentication();
             app.UseHttpsRedirection();
 
             app.UseSwagger();
