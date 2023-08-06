@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Entities;
 using RestaurantAPI.MIddleware;
 using RestaurantAPI.Models.User;
@@ -35,11 +37,22 @@ namespace RestaurantAPI
 
             Configuration.GetSection("Authentication").Bind(authenticationSettings);
 
+            services.AddSingleton(authenticationSettings);
             services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = "Bearer";
                 option.DefaultScheme = "Bearer";
                 option.DefaultChallengeScheme = "Bearer";
+            }).AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = authenticationSettings.JwtIssuer,
+                    ValidAudience = authenticationSettings.JwtIssuer,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(authenticationSettings.JwtKey))
+                };
             });
 
             services.AddControllers().AddFluentValidation();
