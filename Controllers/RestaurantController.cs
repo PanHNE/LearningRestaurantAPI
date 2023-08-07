@@ -41,10 +41,9 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "CreatedMin2Restaurant")]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] string searchPhrase)
         {
-            var restaurantsDTO = _restaurantService.GetAll();
+            var restaurantsDTO = _restaurantService.GetAll(searchPhrase);
 
             return Ok(restaurantsDTO);
         }

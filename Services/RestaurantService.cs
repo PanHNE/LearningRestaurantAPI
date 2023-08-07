@@ -17,7 +17,7 @@ namespace RestaurantAPI.Services
     {
         int Create(CreateRestaurantDto createRestaurantDto);
         void Delete(int id);
-        IEnumerable<RestaurantDto> GetAll();
+        IEnumerable<RestaurantDto> GetAll(string searchPhrase);
         RestaurantDto GetById(int id);
         void Update(int id, UpdateRestaurantDto updateRestaurantDto);
     }
@@ -77,12 +77,13 @@ namespace RestaurantAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDto> GetAll()
+        public IEnumerable<RestaurantDto> GetAll(string searchPhrase)
         {
             var restaurants = _dbContext
                 .Restaurants
                 .Include(r => r.Address)
                 .Include(r => r.Dishes)
+                .Where(r => searchPhrase == null || (r.Name.ToLower().Contains(searchPhrase.ToLower()) || r.Description.ToLower().Contains(searchPhrase.ToLower())))
                 .ToList();
 
             var restaurantsDto = _mapper.Map<List<RestaurantDto>>(restaurants);
