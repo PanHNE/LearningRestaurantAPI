@@ -17,6 +17,7 @@ using Microsoft.IdentityModel.Tokens;
 using RestaurantAPI.Authorization;
 using RestaurantAPI.Entities;
 using RestaurantAPI.MIddleware;
+using RestaurantAPI.Models.Queries;
 using RestaurantAPI.Models.User;
 using RestaurantAPI.Models.Validators;
 using RestaurantAPI.Services;
@@ -78,7 +79,7 @@ namespace RestaurantAPI
 
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
-
+            services.AddScoped<IValidator<RestaurantQuery>, RestaurantQueryValidators>();
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<TimeOutMiddleware>();
 

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Models.Queries;
 using RestaurantAPI.Models.Restaurant;
 using RestaurantAPI.Services;
 
@@ -41,10 +42,9 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "CreatedMin2Restaurant")]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll()
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery restaurantQuery)
         {
-            var restaurantsDTO = _restaurantService.GetAll();
+            var restaurantsDTO = _restaurantService.GetAll(restaurantQuery);
 
             return Ok(restaurantsDTO);
         }
