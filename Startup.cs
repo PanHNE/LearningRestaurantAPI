@@ -71,11 +71,15 @@ namespace RestaurantAPI
             services.AddScoped<IRestaurantService, RestaurantService>();
             services.AddScoped<IDishService, DishService>();
             services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IUserContextService, UserContextService>();
+
             services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
             services.AddScoped<IValidator<RegisterUserDto>, RegisterUserDtoValidator>();
 
             services.AddScoped<ErrorHandlingMiddleware>();
             services.AddScoped<TimeOutMiddleware>();
+
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen();
         }
 
