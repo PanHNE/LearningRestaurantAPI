@@ -10,8 +10,10 @@ using RestaurantAPI.Exceptions;
 using RestaurantAPI.Models;
 using RestaurantAPI.Models.Queries;
 using RestaurantAPI.Models.Restaurant;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Claims;
 
 namespace RestaurantAPI.Services
@@ -90,6 +92,21 @@ namespace RestaurantAPI.Services
                     || r.Name.ToLower().Contains(restaurantQuery.SearchPhrase.ToLower())
                     || r.Description.ToLower().Contains(restaurantQuery.SearchPhrase.ToLower())
                 );
+
+            if (!string.IsNullOrEmpty(restaurantQuery.SortBy))
+            {
+                var columnSelectors = new Dictionary<string, Expression<Func<Restaurant, object>>> {
+                    { nameof(Restaurant.Name), r => r.Name },
+                    { nameof(Restaurant.Description), r => r.Description },
+                    { nameof(Restaurant.Category), r => r.Category }
+                };
+
+                var selectedColumn = columnSelectors[restaurantQuery.SortBy];
+
+                baseQuery = restaurantQuery.SortDirection == SortDirection.ASC
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
 
             var restaurants = baseQuery
                 .Skip(restaurantQuery.PageSize * (restaurantQuery.PageNumber - 1))
