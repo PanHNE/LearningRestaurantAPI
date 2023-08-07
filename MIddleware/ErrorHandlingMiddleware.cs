@@ -28,15 +28,19 @@ namespace RestaurantAPI.MIddleware
                 context.Response.StatusCode = 400;
                 await context.Response.WriteAsync(badRequestException.Message);
             }
-            catch (AlreadyExists alreadyExist)
+            catch (ForbidExcepetion forbidException)
             {
-                context.Response.StatusCode = 409;
-                await context.Response.WriteAsync(alreadyExist.Message);
+                context.Response.StatusCode = 403;
             }
             catch (NotFoundException notFoundException)
             {
                 context.Response.StatusCode = 404;
                 await context.Response.WriteAsync(notFoundException.Message);
+            }
+            catch (AlreadyExists alreadyExist)
+            {
+                context.Response.StatusCode = 409;
+                await context.Response.WriteAsync(alreadyExist.Message);
             }
             catch (Exception e)
             {
