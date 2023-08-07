@@ -1,11 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RestaurantAPI.Authorization;
 using RestaurantAPI.Entities;
 using RestaurantAPI.Exceptions;
+using RestaurantAPI.Models;
+using RestaurantAPI.Models.Queries;
 using RestaurantAPI.Models.Restaurant;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +20,7 @@ namespace RestaurantAPI.Services
     {
         int Create(CreateRestaurantDto createRestaurantDto);
         void Delete(int id);
-        IEnumerable<RestaurantDto> GetAll(string searchPhrase);
+        PagedResult<RestaurantDto> GetAll(RestaurantQuery restaurantQuery);
         RestaurantDto GetById(int id);
         void Update(int id, UpdateRestaurantDto updateRestaurantDto);
     }
@@ -77,18 +80,29 @@ namespace RestaurantAPI.Services
             _dbContext.SaveChanges();
         }
 
-        public IEnumerable<RestaurantDto> GetAll(string searchPhrase)
+        public PagedResult<RestaurantDto> GetAll(RestaurantQuery restaurantQuery)
         {
-            var restaurants = _dbContext
+            var baseQuery = _dbContext
                 .Restaurants
                 .Include(r => r.Address)
                 .Include(r => r.Dishes)
-                .Where(r => searchPhrase == null || (r.Name.ToLower().Contains(searchPhrase.ToLower()) || r.Description.ToLower().Contains(searchPhrase.ToLower())))
+                .Where(r => restaurantQuery.SearchPhrase == null
+                    || r.Name.ToLower().Contains(restaurantQuery.SearchPhrase.ToLower())
+                    || r.Description.ToLower().Contains(restaurantQuery.SearchPhrase.ToLower())
+                );
+
+            var restaurants = baseQuery
+                .Skip(restaurantQuery.PageSize * (restaurantQuery.PageNumber - 1))
+                .Take(restaurantQuery.PageSize)
                 .ToList();
+
+            var restaurantsCount = baseQuery.Count();
 
             var restaurantsDto = _mapper.Map<List<RestaurantDto>>(restaurants);
 
-            return restaurantsDto;
+            var result = new PagedResult<RestaurantDto>(restaurantsDto, restaurantsCount, restaurantQuery.PageSize, restaurantQuery.PageNumber);
+
+            return result;
         }
 
         public RestaurantDto GetById(int id)

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Entities;
+using RestaurantAPI.Models.Queries;
 using RestaurantAPI.Models.Restaurant;
 using RestaurantAPI.Services;
 
@@ -41,9 +42,9 @@ namespace RestaurantAPI.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] string searchPhrase)
+        public ActionResult<IEnumerable<RestaurantDto>> GetAll([FromQuery] RestaurantQuery restaurantQuery)
         {
-            var restaurantsDTO = _restaurantService.GetAll(searchPhrase);
+            var restaurantsDTO = _restaurantService.GetAll(restaurantQuery);
 
             return Ok(restaurantsDTO);
         }
