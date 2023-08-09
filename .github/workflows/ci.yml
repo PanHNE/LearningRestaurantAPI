@@ -1,22 +1,31 @@
 name: CI
 on:
+  push:
+    branches: [main]
   pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [main]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOs-latest]
+
     steps:
-      - uses: actions/checkout@v2
-      - name: Setup .NET Core SDK
+      - 
+        uses: actions/checkout@v2
+      - 
+        name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.9.0 
         with:
           dotnet-version: 6.0.x
-      - name: Restore dependencies
+      - 
+        name: Restore dependencies
         run: dotnet restore
-      - name: Build
+      - 
+        name: Build
         run: dotnet build --no-restore
-      - name: Test
+      - 
+        name: Test
         run: dotnet test
