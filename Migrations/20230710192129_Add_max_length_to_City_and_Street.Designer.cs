@@ -8,7 +8,7 @@ using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Migrations
 {
-    [DbContext(typeof(RestaurantDBContext))]
+    [DbContext(typeof(RestaurantDbContext))]
     [Migration("20230710192129_Add_max_length_to_City_and_Street")]
     partial class Add_max_length_to_City_and_Street
     {

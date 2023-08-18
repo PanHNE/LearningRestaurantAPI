@@ -9,7 +9,7 @@ using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Migrations
 {
-    [DbContext(typeof(RestaurantDBContext))]
+    [DbContext(typeof(RestaurantDbContext))]
     [Migration("20230807083011_RestaurantUserIdAddFix")]
     partial class RestaurantUserIdAddFix
     {

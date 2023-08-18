@@ -4,6 +4,8 @@ using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using NLog.Web;
 using RestaurantAPI;
@@ -15,7 +17,7 @@ using RestaurantAPI.Models.User;
 using RestaurantAPI.Models.Validators;
 using RestaurantAPI.Services;
 
-var builder = WebApplication.CreateBuilder();
+var builder = WebApplication.CreateBuilder(args);
 
 // NLog: Setup NLog for Dependency ijection
 builder.Logging.ClearProviders();
@@ -26,6 +28,8 @@ builder.Host.UseNLog();
 var authenticationSettings = new AuthenticationsSettings();
 
 builder.Configuration.GetSection("Authentication").Bind(authenticationSettings);
+
+Console.WriteLine(authenticationSettings);
 
 builder.Services.AddSingleton(authenticationSettings);
 builder.Services.AddAuthentication(option =>
@@ -55,7 +59,7 @@ builder.Services.AddScoped<IAuthorizationHandler, MinimumCreatedRestaurantsHandl
 builder.Services.AddScoped<IAuthorizationHandler, ResourceOperationRequirementHandler>();
 
 builder.Services.AddControllers().AddFluentValidation();
-builder.Services.AddDbContext<RestaurantDBContext>();
+builder.Services.AddDbContext<RestaurantDbContext>();
 builder.Services.AddScoped<RestaurantSeeder>();
 builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
@@ -75,13 +79,24 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontEndClient", policyBuilder =>
-        policyBuilder.AllowAnyMethod().AllowAnyHeader().WithOrigins(builder.Configuration["AllowedOrigins"])
+        policyBuilder
+        .AllowAnyMethod()
+        .AllowAnyHeader()
+        .WithOrigins(builder.Configuration["AllowedOrigins"])
     );
 });
 
-var app = builder.Build();
-// configure
+var dbConnectionSettings = new DbConnectionSettings();
+builder.Configuration.GetSection("ConnectionStrings").Bind(dbConnectionSettings);
 
+Console.WriteLine("dbConnectionSettings => " + dbConnectionSettings);
+
+builder.Services.AddDbContext<RestaurantDbContext>
+                (options => options.UseSqlServer(dbConnectionSettings.RestaurantDbConnection));
+
+var app = builder.Build();
+
+// configure
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<RestaurantSeeder>();
 
@@ -121,5 +136,8 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
 });
+
 // checking
 app.Run();
+
+public partial class Program { }

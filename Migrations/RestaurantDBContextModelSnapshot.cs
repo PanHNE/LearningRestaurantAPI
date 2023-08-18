@@ -8,7 +8,7 @@ using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Migrations
 {
-    [DbContext(typeof(RestaurantDBContext))]
+    [DbContext(typeof(RestaurantDbContext))]
     partial class RestaurantDBContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

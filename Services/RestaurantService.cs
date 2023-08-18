@@ -32,10 +32,10 @@ namespace RestaurantAPI.Services
         private readonly IAuthorizationService _authorizationService;
         private readonly ILogger<RestaurantService> _logger;
         private readonly IMapper _mapper;
-        private readonly RestaurantDBContext _dbContext;
+        private readonly RestaurantDbContext _dbContext;
         private readonly IUserContextService _userContextService;
 
-        public RestaurantService(IAuthorizationService authorizationService, ILogger<RestaurantService> logger, IMapper mapper, RestaurantDBContext dBContext, IUserContextService userContextService)
+        public RestaurantService(IAuthorizationService authorizationService, ILogger<RestaurantService> logger, IMapper mapper, RestaurantDbContext dBContext, IUserContextService userContextService)
         {
             _authorizationService = authorizationService;
             _dbContext = dBContext;

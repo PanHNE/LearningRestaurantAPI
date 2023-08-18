@@ -21,11 +21,11 @@ namespace RestaurantAPI.Services
 
     public class DishService : IDishService
     {
-        private readonly RestaurantDBContext _dbContext;
+        private readonly RestaurantDbContext _dbContext;
         private readonly IMapper _mapper;
         private readonly IRestaurantService _restaurantService;
 
-        public DishService(RestaurantDBContext restaurantDbContext, IMapper mapper, IRestaurantService restaurantService)
+        public DishService(RestaurantDbContext restaurantDbContext, IMapper mapper, IRestaurantService restaurantService)
         {
             this._dbContext = restaurantDbContext;
             this._mapper = mapper;

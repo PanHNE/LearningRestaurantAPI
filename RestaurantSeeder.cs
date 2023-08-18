@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Entities;
 
 namespace RestaurantAPI
 {
     public class RestaurantSeeder
     {
-        private readonly RestaurantDBContext _dbContext;
-        public RestaurantSeeder(RestaurantDBContext dBContext)
+        private readonly RestaurantDbContext _dbContext;
+
+        public RestaurantSeeder(RestaurantDbContext dBContext)
         {
             _dbContext = dBContext;
         }
@@ -16,6 +18,15 @@ namespace RestaurantAPI
         {
             if (_dbContext.Database.CanConnect()) 
             {
+                if (_dbContext.Database.IsRelational())
+                {
+                    var pendingMigrations = _dbContext.Database.GetPendingMigrations();
+                    if (pendingMigrations != null || pendingMigrations.Any())
+                    {
+                        _dbContext.Database.Migrate();
+                    }
+                }
+
                 if (!_dbContext.Restaurants.Any())
                 {
                     var restaurants = GetRestaurants();

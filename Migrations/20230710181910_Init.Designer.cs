@@ -8,7 +8,7 @@ using RestaurantAPI.Entities;
 
 namespace RestaurantAPI.Migrations
 {
-    [DbContext(typeof(RestaurantDBContext))]
+    [DbContext(typeof(RestaurantDbContext))]
     [Migration("20230710181910_Init")]
     partial class Init
     {

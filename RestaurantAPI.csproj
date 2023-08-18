@@ -18,10 +18,15 @@
     </PackageReference>
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="PrivateFiles\" />
   </ItemGroup>
+
+	<ItemGroup>
+		<InternalsVisibleTo Include="RestaurantAPI.IntegrationTests"/>
+	</ItemGroup>
 
 </Project>

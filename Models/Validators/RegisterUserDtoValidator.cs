@@ -7,7 +7,7 @@ namespace RestaurantAPI.Models.Validators
 {
     public class RegisterUserDtoValidator : AbstractValidator<RegisterUserDto>
     {
-        public RegisterUserDtoValidator(RestaurantDBContext restaurantDbContext)
+        public RegisterUserDtoValidator(RestaurantDbContext restaurantDbContext)
         {
             RuleFor( x => x.Email)
                 .NotEmpty()

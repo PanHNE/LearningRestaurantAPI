@@ -2,10 +2,15 @@
 
 namespace RestaurantAPI.Entities
 {
-    public class RestaurantDBContext : DbContext
+    public class RestaurantDbContext : DbContext
     {
-        public string _connectionString =
+        private const string _connectionString =
             "Server=DESKTOP-47QGLSK\\SQLEXPRESS;Database=RestaurantDatabase;Trusted_Connection=True;";
+
+        public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options) : base(options)
+        {
+            
+        }
 
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<Address> Addresses { get; set; }
@@ -50,7 +55,10 @@ namespace RestaurantAPI.Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(_connectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(_connectionString);
+            }
         }
     }
 }

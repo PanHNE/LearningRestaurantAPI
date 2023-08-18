@@ -12,9 +12,9 @@ namespace RestaurantAPI.Authorization
     public class MinimumCreatedRestaurantsHandler : AuthorizationHandler<MinimumCreatedRestaurantRequirment>
     {
         private readonly ILogger<MinimumAgeRequirementHandler> _logger;
-        private readonly RestaurantDBContext _dBContext;
+        private readonly RestaurantDbContext _dBContext;
 
-        public MinimumCreatedRestaurantsHandler(ILogger<MinimumAgeRequirementHandler> logger, RestaurantDBContext dBContext)
+        public MinimumCreatedRestaurantsHandler(ILogger<MinimumAgeRequirementHandler> logger, RestaurantDbContext dBContext)
         {
             _logger = logger;
             _dBContext = dBContext;

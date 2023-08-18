@@ -23,14 +23,14 @@ namespace RestaurantAPI.Services
 
     public class AccountService : IAccountService
     {
-        private readonly RestaurantDBContext _dbContext;
+        private readonly RestaurantDbContext _dbContext;
         private readonly ILogger<AccountService> _logger;
         private readonly IMapper _mapper;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly AuthenticationsSettings _authenticationSettings;
 
         public AccountService(
-            RestaurantDBContext restaurantDBContext,
+            RestaurantDbContext restaurantDBContext,
             IMapper mapper,
             ILogger<AccountService> logger,
             IPasswordHasher<User> passwordHasher,
