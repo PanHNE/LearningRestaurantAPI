@@ -62,8 +62,6 @@ namespace RestaurantAPI.Services
 
             var restaurant = _dbContext
                 .Restaurants
-                .Include(r => r.Address)
-                .Include(r => r.Dishes)
                 .FirstOrDefault(r => r.Id == id);
 
             if (restaurant == null)
