@@ -15,17 +15,22 @@ jobs:
     steps:
       - 
         uses: actions/checkout@v2
+
       - 
         name: Setup .NET Core SDK
         uses: actions/setup-dotnet@v1.9.0 
         with:
           dotnet-version: 6.0.x
+
       - 
         name: Restore dependencies
+        working-directory: ./RestaurantAPI
         run: dotnet restore
       - 
         name: Build
+        working-directory: ./RestaurantAPI
         run: dotnet build --no-restore
       - 
         name: Test
+        working-directory: ./RestaurantAPI.IntegrationTests
         run: dotnet test
