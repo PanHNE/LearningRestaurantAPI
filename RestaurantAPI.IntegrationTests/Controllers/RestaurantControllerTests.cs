@@ -17,11 +17,10 @@ namespace RestaurantAPI.IntegrationTests.Controllers
 {
     public class RestaurantControllerTests : IClassFixture<WebApplicationFactory<Program>>
     {
-        private readonly ITestOutputHelper _outputHelper;
         private readonly HttpClient _client;
         private readonly WebApplicationFactory<Program> _factory;
 
-        public RestaurantControllerTests(WebApplicationFactory<Program> factory, ITestOutputHelper outputHelper)
+        public RestaurantControllerTests(WebApplicationFactory<Program> factory)
         {
             _factory = factory
                 .WithWebHostBuilder(builder =>
@@ -41,8 +40,6 @@ namespace RestaurantAPI.IntegrationTests.Controllers
                 });
 
             _client = _factory.CreateClient();
-
-            _outputHelper = outputHelper;
         }
 
         [Theory]
