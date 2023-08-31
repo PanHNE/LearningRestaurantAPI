@@ -62,10 +62,6 @@ namespace RestaurantAPI.IntegrationTests.Controllers
         public async Task Register_WithInValidModel_ReturnsBadRequest()
         {
             // arrange
-            _mockAccountService
-                .Setup(e => e.GenerateJwt(It.IsAny<LoginUserDto>()))
-                .Returns("jwt");
-
             var model = new RegisterUserDto()
             {
                 Email = "Test-test.pl",
@@ -89,6 +85,10 @@ namespace RestaurantAPI.IntegrationTests.Controllers
         public async Task Login_ForRegisteredUser_ReturnsOk()
         {
             // arrange
+            _mockAccountService
+                .Setup(e => e.GenerateJwt(It.IsAny<LoginUserDto>()))
+                .Returns("jwt");
+
             var loginModel = new LoginUserDto()
             {
                 Email = "test@tet.pl",
