@@ -5,7 +5,7 @@ namespace RestaurantAPI.Entities
     public class RestaurantDbContext : DbContext
     {
         private const string _connectionString =
-            "Server=DESKTOP-47QGLSK\\SQLEXPRESS;Database=RestaurantDatabase;Trusted_Connection=True;";
+            "Server=DESKTOP-47QGLSK\\SQLEXPRESS;Database=RestaurantDatabase;Trusted_Connection=True;TrustServerCertificate=true";
 
         public RestaurantDbContext(DbContextOptions<RestaurantDbContext> options) : base(options)
         {
