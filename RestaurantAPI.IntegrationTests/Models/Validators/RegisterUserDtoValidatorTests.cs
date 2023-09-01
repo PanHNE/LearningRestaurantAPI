@@ -41,17 +41,65 @@ namespace RestaurantAPI.IntegrationTests.Models.Validators
             _dbContext.SaveChanges();
         }
 
-        [Fact]
-        public void Validate_ForValidModel_ReturnSuccess()
+        public static IEnumerable<object[]> GetSampleValidData()
         {
-            // arrange
-            var model = new RegisterUserDto()
+            var list = new List<RegisterUserDto>
             {
-                Email = "test@test.pl",
-                Password = "password",
-                ConfirmPassword = "password",
+                new RegisterUserDto()
+                {
+                    Email = "test@test.pl",
+                    Password = "password",
+                    ConfirmPassword = "password",
+                },
+                new RegisterUserDto()
+                {
+                    Email = "test5@test.pl",
+                    Password = "password",
+                    ConfirmPassword = "password",
+                },
+                new RegisterUserDto()
+                {
+                    Email = "tes7@test.pl",
+                    Password = "password",
+                    ConfirmPassword = "password",
+                },
             };
 
+            return list.Select(q => new object[] { q });
+        }
+
+        public static IEnumerable<object[]> GetSampleInvalidData()
+        {
+            var list = new List<RegisterUserDto>
+            {
+                new RegisterUserDto()
+                {
+                    Email = "test2@test.com",
+                    Password = "password",
+                    ConfirmPassword = "password",
+                },
+                new RegisterUserDto()
+                {
+                    Email = "test@test.pl",
+                    Password = "pass2word",
+                    ConfirmPassword = "password",
+                },
+                new RegisterUserDto()
+                {
+                    Email = "tes7@test.pl",
+                    Password = "p",
+                    ConfirmPassword = "p",
+                },
+            };
+
+            return list.Select(q => new object[] { q });
+        }
+
+        [Theory]
+        [MemberData(nameof(GetSampleValidData))]
+        public void Validate_ForValidModel_ReturnSuccess(RegisterUserDto model)
+        {
+            // arrange
             var validator = new RegisterUserDtoValidator(_dbContext);
 
             // act
@@ -62,17 +110,11 @@ namespace RestaurantAPI.IntegrationTests.Models.Validators
 
         }
 
-        [Fact]
-        public void Validate_ForInvalidModel_ReturnFailure()
+        [Theory]
+        [MemberData(nameof(GetSampleInvalidData))]
+        public void Validate_ForInvalidModel_ReturnFailure(RegisterUserDto model)
         {
             // arrange
-            var model = new RegisterUserDto()
-            {
-                Email = "test2@test.com",
-                Password = "password",
-                ConfirmPassword = "password",
-            };
-
             var validator = new RegisterUserDtoValidator(_dbContext);
 
             // act
