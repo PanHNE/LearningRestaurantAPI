@@ -6,11 +6,12 @@ namespace RestaurantAPI.IntegrationTests
 {
     public class ProgramTests : IClassFixture<WebApplicationFactory<Program>>
     {
+        private List<Type> _controllerTypes;
         private readonly WebApplicationFactory<Program> _factory;
 
         public ProgramTests(WebApplicationFactory<Program> factory)
         {
-            var controllerTypes = typeof(Program)
+            _controllerTypes = typeof(Program)
                 .Assembly
                 .GetTypes()
                 .Where(t => t.IsSubclassOf(typeof(ControllerBase)))
@@ -20,9 +21,25 @@ namespace RestaurantAPI.IntegrationTests
             {
                 builder.ConfigureServices(services =>
                 {
-                    controllerTypes.ForEach(c => services.AddScoped(c));
+                    _controllerTypes.ForEach(c => services.AddScoped(c));
                 });
             });
+        }
+
+        [Fact]
+        public void ConfigureServices_ForControllers_RegisterAllDependencies()
+        {
+            var scopeFactory = _factory.Services.GetService<IServiceScopeFactory>();
+            using var scope = scopeFactory.CreateScope();
+
+            // assert 
+            _controllerTypes.ForEach(ct =>
+            {
+                var controller = scope.ServiceProvider.GetService(ct);
+                
+                controller.Should().NotBeNull();
+            });
+
         }
     }
 }
